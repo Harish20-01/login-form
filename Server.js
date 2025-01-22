@@ -2,6 +2,7 @@ const express = require('express');
 const bodyparser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const path = require('path');
 const port = 3000;
 
 const app = express();
@@ -9,6 +10,25 @@ const app = express();
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(cors());
+
+const corsOptions = {
+    origin: 'https://details-form-3.onrender.com', // Your front-end URL
+    methods: 'GET,POST',
+    allowedHeaders: 'Content-Type',
+  };
+  
+  app.use(cors(corsOptions));
+  
+
+
+// Serve static files from the 'public' folder
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Catch-all route to send index.html for any request to '/'
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
 
 const userSchema = new mongoose.Schema({
     name: String,
