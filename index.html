@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Details</title>
+</head>
+<body>
+    <form action="http://localhost:3000/submit"  id="login-form" >
+    <div id="login-container">
+        <div id="nameConatiner">
+            <label for="name">NAME:</label>
+            <input type="text" name="name">
+        </div>
+        <div id="regnoContainer">
+            <label for="rego">REGNO:</label>
+            <input type="text" name="regno">
+        </div>
+        <div id="emailContainer">
+            <label for="email">EMAIL</label>
+            <input type="text " name="email">
+        </div>
+        <div id="messageContainer">
+            <label for="message" id="messageLabel"></label>
+        </div>
+        <button type="submit">SUBMIT</button>
+    </div>
+</form>
+<style>
+    body{
+        background-color: ;
+        margin: 20px;
+    }
+    #login-form{
+        display: flex;
+        padding: 10px;
+        align-items: center;
+        justify-content: center;
+        height:100vh;
+        
+       
+    }
+    #login-container{
+        box-shadow: 3px 3px 20px rgb(6, 170, 64);
+        padding: 20px;
+        background-color: rgb(250, 248, 245);
+    }
+    #login-container div{
+        display: grid;
+       
+    }
+    #login-container div input{
+        width:200px;
+        margin-top: 8px;
+        height:25px;
+        border:none;
+        box-shadow: 2px 2px 5px black;
+        border-radius: 10px;;
+        color:rgb(10, 56, 56);
+        font-weight: bold;
+    }
+    label{
+        margin-top: 10px;
+    }
+    button{
+        margin-left: 0px;
+        margin-top: 30px;
+        width: 200px;
+        height:30px;
+        background-color: rgb(174, 174, 197);
+        border-radius: 10px;
+        transition: font-weight  ,0.05ms;
+    }
+    button:hover{
+        font-weight: bolder;
+    }
+
+</style>
+<script>
+    const form = document.getElementById("login-form");
+
+form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const name = document.querySelector('input[name="name"]').value;
+    const regno = document.querySelector('input[name="regno"]').value;
+    const email = document.querySelector('input[name="email"]').value;
+
+    const formData = { name, regno, email };
+
+    try {
+        const response = await fetch('http://localhost:3000/submit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData), // Send data as JSON
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            document.getElementById("messageLabel").innerText = "Successfully saved the details!";
+            document.getElementById("messageLabel").style.color = "green";
+            form.reset();
+            setTimeout(() => {
+                        document.getElementById("messageLabel").innerText = "";
+                    }, 3000);
+        } else {
+            console.log('Error response:', result);  // Log the error response
+            document.getElementById("messageLabel").innerText = result.error || "Something went wrong!";
+            document.getElementById("messageLabel").style.color = "red";
+            setTimeout(() => {
+                        document.getElementById("messageLabel").innerText = "";
+                    }, 3000);
+        }
+    } catch (error) {
+        console.log('Request failed', error);
+    }
+});
+
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyDbNYWK0PK_sqFNMGe_qXCc1ZFmbxzllQk",
+  authDomain: "sampleproject-fea58.firebaseapp.com",
+  projectId: "sampleproject-fea58",
+  storageBucket: "sampleproject-fea58.firebasestorage.app",
+  messagingSenderId: "1074972322231",
+  appId: "1:1074972322231:web:57044efd2f7cfa8c236032",
+  measurementId: "G-8BL26KJEWN"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+
+</script>
+    
+</body>
+</html>
